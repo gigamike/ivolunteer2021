@@ -1,0 +1,242 @@
+<div class="container space-top-md-2">
+    <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">
+        <?php echo $this->escapeHtml($this->event->getName()); ?>
+        <small></small>
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="<?php echo $this->url('home'); ?>">Home</a>
+        </li>
+        <li class="breadcrumb-item active">
+            <?php echo $this->escapeHtml($this->event->getName()); ?>
+        </li>
+    </ol>
+    <!-- Intro Content -->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="text-center"><img class="img-fluid rounded mb-4" src="/img/event/<?php echo $this->event->getId(); ?>/photo-750x450.jpg" alt=""></div>
+            <p>
+                <?php echo $this->escapeHtml($this->event->getDescription()); ?>
+            </p>
+            <?php if ($this->event->getEventType() == 'team'): ?>
+            <?php if (count($teamStandings) > 0): $standing = 0; ?>
+            <h3>Team Standing</h3>
+            <?php foreach ($teamStandings as $teamStanding): ?>
+            <?php
+                $teamPoints = 0;
+                if ($teamStanding['points']) {
+                    $teamPoints = $teamStanding['points'];
+                    $standing++;
+                }
+            ?>
+            <div class="media mb-4">
+                <?php if ($teamPoints): ?>
+                <?php if ($standing==1): ?>
+                <img class="d-flex mr-3 rounded-circle" src="/img/medal1.jpg" alt="">
+                <?php endif; ?>
+                <?php if ($standing==2): ?>
+                <img class="d-flex mr-3 rounded-circle" src="/img/medal2.jpg" alt="">
+                <?php endif; ?>
+                <?php if ($standing==3): ?>
+                <img class="d-flex mr-3 rounded-circle" src="/img/medal3.jpg" alt="">
+                <?php endif; ?>
+                <?php else: ?>
+                <img class="d-flex mr-3 rounded-circle" src="/img/medal0.jpg" alt="">
+                <?php endif; ?>
+                <div class="media-body">
+                    <h5 class="mt-0">
+                        <?php echo $teamStanding['name']; ?> (
+                        <?php if (empty($teamPoints)): ?>
+                        <?php echo "0 Points"; ?>
+                        <?php elseif ($teamPoints==1): ?>
+                        <?php echo "1 Point"; ?>
+                        <?php elseif ($teamPoints==2): ?>
+                        <?php echo $teamPoints . " Point"; ?>
+                        <?php endif; ?>
+                        )
+                    </h5>
+                    <?php echo $this->getEventTeamMembers($teamStanding->id); ?>
+                </div>
+            </div>
+            <?php endforeach ?>
+            <?php endif; ?>
+            <?php endif; ?>
+        </div>
+        <div class="col-lg-6">
+            <?php
+            $flash = $this->flashMessenger();
+            $flash->setMessageOpenFormat('<div%s role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                ')
+                ->setMessageSeparatorString('')
+                ->setMessageCloseString('</div>');
+
+            echo $flash->render('error', ['alert', 'alert-dismissible', 'alert-danger']);
+            echo $flash->render('info', ['alert', 'alert-dismissible', 'alert-info']);
+            echo $flash->render('default', ['alert', 'alert-dismissible', 'alert-warning']);
+            echo $flash->render('success', ['alert', 'alert-dismissible', 'alert-success']);
+             ?>
+            <h2>
+                <?php echo $this->escapeHtml($this->event->getName()); ?>
+            </h2>
+            <small><i class="far fa-calendar-alt"></i>
+                <?php echo $this->escapeHtml(date('M d, Y', strtotime($this->event->getEventDate()))); ?></small>
+            <br><small><i class="fas fa-location-arrow"></i>
+                <?php echo $this->escapeHtml($this->event->getVenue()); ?></small>
+            <?php if (!empty($this->event->getOrganization())): ?>
+            <br><small><i class="fas fa-sitemap"></i>
+                <?php echo $this->escapeHtml($this->event->getOrganization()); ?></small>
+            <?php endif; ?>
+            <?php if (!empty($this->event->getContactName())): ?>
+            <br><small><i class="far fa-id-badge"></i>
+                <?php echo $this->escapeHtml($this->event->getContactName()); ?></small>
+            <?php endif; ?>
+            <?php if (!empty($this->event->getContactEmail())): ?>
+            <br><small><i class="far fa-envelope"></i>
+                <?php echo $this->escapeHtml($this->event->getContactEmail()); ?></small>
+            <?php endif; ?>
+            <?php if (!empty($this->event->getContactMobileNo())): ?>
+            <br><small><i class="fas fa-phone"></i>
+                <?php echo $this->escapeHtml($this->event->getContactMobileNo()); ?></small>
+            <?php endif; ?>
+            <?php if (!empty($this->event->getWebsiteUrl())): ?>
+            <br><small><i class="fas fa-link"></i>
+                <a href="<?php echo $this->escapeHtml($this->event->getWebsiteUrl()); ?>" target="_blank">
+                    <?php echo $this->escapeHtml($this->event->getWebsiteUrl()); ?></a></small>
+            <?php endif; ?>
+            <br><small>
+                <?php if ($this->event->getEventType() == 'team'): ?>
+                <i class="fas fa-users"></i>
+                <?php else: ?>
+                <i class="fas fa-user"></i>
+                <?php endif; ?>
+                <?php echo $this->escapeHtml($this->event->getEventType()); ?></small>
+            <?php if (count($this->tasks) > 0): ?>
+            <h4 class="my-3">Activities/Tasks</h4>
+            <ul>
+                <?php foreach ($tasks as $task): ?>
+                <li>
+                    <?php echo $task->getTask(); ?>
+                </li>
+                <?php endforeach; ?>
+            </ul>
+            <?php endif; ?>
+            <?php if ($this->userEvent): ?>
+            <p>
+                <strong>Name: </strong>
+                <?php echo $this->escapehtml($this->user->getFirstName()); ?>
+                <?php echo $this->escapehtml($this->user->getLastName()); ?>
+                <br>
+                <strong>Email: </strong>
+                <?php echo $this->escapehtml($this->user->getEmail()); ?>
+                <?php if ($this->event->getEventType() == 'team'): ?>
+                <?php if (count($this->eventTeamMember) > 0): ?>
+                <br>
+                <strong>Your Team: </strong>
+                <?php foreach ($this->eventTeamMember as $rows): ?>
+                <?php echo $this->escapehtml($rows->name); ?>
+                <?php endforeach; ?>
+                <?php endif; ?>
+                <?php endif; ?>
+            </p>
+            <div class="text-center">
+                <img class="img-thumbnail" src="<?php echo $this->getQRCode($this->user->getEmail(), 300, 300); ?>">
+            </div>
+            <div class="text-center mt-4">
+                <a href="<?php echo $this->url('events', ['action' => 'pdf', 'id' => $this->event->getId(),]); ?>" class="btn btn-secondary">Download</a>
+            </div>
+            <?php else: ?>
+            <?php if ($this->event->getEventDate() > date('Y-m-d', strtotime('yesterday'))): ?>
+            <?php if ($this->event->getEventType() == 'individual'): ?>
+            <div class="row mb-3">
+                <div class="col-lg-4">
+                    <button onclick="joinIndividual()" type="button" class="btn btn-primary">Volunteer</button>
+                </div>
+                <div class="col-lg-8">
+                    <?php echo $this->getEventVolunteerProgress($this->event->getId()); ?>
+                </div>
+            </div>
+            <?php endif; ?>
+            <?php if ($this->event->getEventType() == 'team'): ?>
+            <?php foreach ($teams as $team): ?>
+            <div class="row mb-3">
+                <div class="col-lg-4">
+                    <button onclick="joinTeam(<?php echo $team->getId(); ?>)" type="button" class="btn btn-primary">
+                        Join
+                        <?php echo $team->getName(); ?></button>
+                </div>
+                <div class="col-lg-8">
+                    <?php echo $this->getEventTeamProgress($team->getId()); ?>
+                </div>
+            </div>
+            <?php endforeach; ?>
+            <?php endif; ?>
+            <?php else: ?>
+            <?php endif; ?>
+            <?php endif; ?>
+        </div>
+    </div>
+    <!-- /.row -->
+    <!-- Our Customers -->
+    <br>
+    <h2>Other Events</h2>
+    <div class="row">
+        <?php foreach ($previousEvents as $row): ?>
+        <div class="col-lg-2 col-sm-4 mb-4">
+            <a href=""><img class="img-fluid" src="/img/event/<?php echo $row->getId(); ?>/photo-750x450.jpg" alt=""></a>
+        </div>
+        <?php endforeach; ?>
+    </div>
+    <!-- /.row -->
+</div>
+<!-- Modal -->
+<div class="modal fade" id="modalJoin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Hello
+                    <?php echo $this->escapehtml($this->user->getFirstName()); ?>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Before you click 'I will attend' please note that clicking this button means you will be given a slot for this volunteer opportunity. We've prepared this event so you could have a great time volunteering. We are really counting on you to show up!
+                </p>
+                <p>
+                    In the case that you're unable to attend the event, please go to your dashboard and click the 'Unjoin' button to give other volunteers an opportunity to attend. You can also contact the person in charge to give a heads up. We hope to see you soon!
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="joinBtn" type="button" class="btn btn-primary">I Will Attend</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<form id="joinFrm" action="<?php echo $this->url('events', ['action' => 'volunteer',]); ?>" method="POST">
+    <input type="hidden" id="event_id" name="event_id" value="<?php echo $this->event->getId(); ?>">
+    <input type="hidden" id="team_id" name="team_id" value="">
+</form>
+<script>
+$(document).ready(function() {
+    $('#joinBtn').click(function(e) {
+        $('#joinFrm').submit();
+    });
+});
+
+function joinIndividual() {
+    $('#modalJoin').modal('show');
+}
+
+function joinTeam(teamId) {
+    $('#team_id').val(teamId);
+    $('#modalJoin').modal('show');
+}
+</script>

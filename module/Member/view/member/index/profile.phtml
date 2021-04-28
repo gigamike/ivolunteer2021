@@ -1,0 +1,60 @@
+<div class="container space-top-md-2">
+
+  <!-- Page Heading/Breadcrumbs -->
+  <h1 class="mt-4 mb-3">Welcome
+    <small><?php echo $this->user->getFirstName(); ?> <?php echo $this->user->getLastName(); ?></small>
+  </h1>
+
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="<?php echo $this->url('member'); ?>">Home</a>
+    </li>
+    <li class="breadcrumb-item active">My Profile</li>
+  </ol>
+
+  <!-- Content Row -->
+  <div class="row">
+    <?php
+    $flash = $this->flashMessenger();
+    $flash->setMessageOpenFormat('<div%s role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        ')
+        ->setMessageSeparatorString('')
+        ->setMessageCloseString('</div>');
+
+    echo $flash->render('error',   array('alert', 'alert-dismissible', 'alert-danger'));
+    echo $flash->render('info',    array('alert', 'alert-dismissible', 'alert-info'));
+    echo $flash->render('default', array('alert', 'alert-dismissible', 'alert-warning'));
+    echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success'));
+     ?>
+
+      <!-- Sidebar Column -->
+      <div class="col-lg-3 mb-4">
+        <?php echo $this->partial('partial/member/menu.phtml', array(
+            'route' => $this->route,
+            'action' => $this->action,
+        )); ?>
+      </div>
+    <!-- Content Column -->
+    <div class="col-lg-9 mb-4">
+      <div class="card card-register mx-auto">
+        <div class="card-header">My Profile</div>
+        <div class="card-body">
+          <p><strong>Name: </strong> <?php echo $this->escapehtml($this->user->getFirstName()); ?> <?php echo $this->escapehtml($this->user->getLastName()); ?> (<?php echo $this->escapehtml($this->user->getTitle()); ?>)</p>
+          <p><strong>Email: </strong> <?php echo $this->escapehtml($this->user->getEmail()); ?><p>
+
+          <div>
+            <img class="img-fluid" src="<?php echo $this->getQRCode($this->user->getEmail(), 500, 500); ?>">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.container-fluid -->
+
+    </div>
+  </div>
+  <!-- /.row -->
+
+</div>

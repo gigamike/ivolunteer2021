@@ -1,0 +1,6 @@
+<div class="list-group">
+    <a href="<?php echo $this->url('member'); ?>" class="list-group-item <?php if ($this->route=='member' && $this->action=='index'): ?>active<?php endif; ?>">Dashboard</a>
+    <a href="<?php echo $this->url('member', ['action' => 'profile',]); ?>" class="list-group-item <?php if ($this->route=='member' && $this->action=='profile'): ?>active<?php endif; ?>">My Profile</a>
+    <a href="<?php echo $this->url('member', ['action' => 'referrals',]); ?>" class="list-group-item <?php if ($this->route=='member' && $this->action=='referrals'): ?>active<?php endif; ?>">Referrals</a>
+    <a href="<?php echo $this->url('logout'); ?>" class="list-group-item">Logout</a>
+</div>

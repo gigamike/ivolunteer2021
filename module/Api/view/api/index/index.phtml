@@ -1,0 +1,35 @@
+<div class="container space-top-md-2">
+  <!-- Page Heading/Breadcrumbs -->
+  <h1 class="mt-4 mb-3">API
+    <small>How To</small>
+  </h1>
+
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="<?php echo $this->url('home'); ?>">Home</a>
+    </li>
+    <li class="breadcrumb-item active">API</li>
+  </ol>
+
+  <div class="mb-4" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="card">
+      <div class="card-header" role="tab" id="headingOne">
+        <h5 class="mb-0">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">GET Search</a>
+        </h5>
+      </div>
+
+      <div id="collapseOne" class="collapse show" role="tabpanel" aria-labelledby="headingOne">
+        <div class="card-body">
+          <strong>Endpoint:</strong> <?php echo $this->config['baseUrl']; ?>api/search<br>
+          <strong>GET Parameters:</strong>
+          <ul>
+            <li><strong>access_key</strong> - required, Access Key.</li>
+            <li><strong>access_key_secret</strong> - required, Access Key Secret.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

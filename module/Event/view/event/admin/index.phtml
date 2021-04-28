@@ -1,0 +1,137 @@
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="<?php echo $this->url('admin-event'); ?>">Event</a>
+        </li>
+        <li class="breadcrumb-item active">Overview</li>
+    </ol>
+    <?php
+    $flash = $this->flashMessenger();
+    $flash->setMessageOpenFormat('<div%s role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        ')
+        ->setMessageSeparatorString('')
+        ->setMessageCloseString('</div>');
+
+    echo $flash->render('error', ['alert', 'alert-dismissible', 'alert-danger']);
+    echo $flash->render('info', ['alert', 'alert-dismissible', 'alert-info']);
+    echo $flash->render('default', ['alert', 'alert-dismissible', 'alert-warning']);
+    echo $flash->render('success', ['alert', 'alert-dismissible', 'alert-success']);
+     ?>
+    <div class="card mb-3">
+        <div class="card-header">
+            <?php
+        $form->setAttribute('action', $this->url('admin-event', ['action' => 'search',]));
+        $form->prepare();
+        echo $this->form()->openTag($form);
+        ?>
+            <div class="form-row">
+                <div class="col">
+                    <?= $this->formElement($form->get('name_keyword')) ?>
+                </div>
+                <?php echo $this->formSubmit($form->get('submit')); ?>
+                <div class="col"><a href="<?php echo $this->url('admin-event', ['action' => 'add',]); ?>" class="btn btn-secondary">Add</a></div>
+            </div>
+            <?php echo $this->form()->closeTag();?>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <form id="frmSearch" method="post">
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width:2%"><input type="checkbox" id="checkAll" /></th>
+                                <th>Date</th>
+                                <th>Name</th>
+                                <th>Venue</th>
+                                <th style="width:3%">Attendance</th>
+                                <th style="width:3%">Tasks</th>
+                                <th style="width:3%">Volunteers</th>
+                                <th style="width:3%">Edit</th>
+                                <th style="width:3%">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (count($this->paginator)): ?>
+                            <?php foreach ($this->paginator as $event): ?>
+                            <tr>
+                                <td><input type="checkbox" name="ids[]" value="<?php echo $this->escapeHtml($event->getId());?>"></td>
+                                <td>
+                                    <?php echo $this->escapeHtml(date('F d, Y l', strtotime($event->getEventDate()))); ?>
+                                </td>
+                                <td>
+                                    <?php echo $this->escapeHtml($event->getName()); ?>
+                                </td>
+                                <td>
+                                    <?php echo $this->escapeHtml($event->getVenue()); ?>
+                                </td>
+                                <td><a href="<?php echo $this->url('admin-event', ['action' => 'attendance', 'id' => $event->getId(),]); ?>">Attendance</a></td>
+                                <td><a href="<?php echo $this->url('admin-event', ['action' => 'tasks', 'id' => $event->getId(),]); ?>">Tasks</a></td>
+                                <td><a href="<?php echo $this->url('admin-event', ['action' => 'volunteers', 'id' => $event->getId(),]); ?>">Volunteers</a></td>
+                                <td><a href="<?php echo $this->url('admin-event', ['action' => 'edit', 'id' => $event->getId(),]); ?>">Edit</a></td>
+                                <td><a data-id="Event ID <?php echo $this->escapeHtml($event->getId()); ?>" class="delete" href="<?php echo $this->url('admin-event', ['action' => 'delete', 'id' => $event->getId(),]); ?>">Delete</a></td>
+                            </tr>
+                            <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                    <button type="submit" class="delete-selected btn btn-danger">Delete Selected</button>
+                </form>
+            </div>
+        </div>
+        <div class="card-footer small text-muted">
+            <?= $this->paginationControl(
+            $this->paginator,
+            'Sliding',
+            'partial/admin-event/paginator.phtml',
+            [
+                'route' => 'admin-event',
+            ]
+        ) ?>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalTitle">Delete Event</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="deleteButton">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Delete Selected Modal -->
+<div class="modal fade" id="deleteSelectedModal" tabindex="-1" role="dialog" aria-labelledby="deleteSelectedModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteSelectedModalTitle">Delete Selected Event</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete selected events?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="deleteSelectedButton">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<?php $this->headScript()->appendFile('/js/checkbox.js')->appendFile('/js/delete.js'); ?>

@@ -1,0 +1,166 @@
+<!-- Hero Section -->
+<?php foreach ($this->latestEvent as $row): ?>
+<div class="container space-2 space-top-md-5 space-top-lg-4">
+    <div class="row justify-content-lg-between mb-7">
+        <div class="col-lg-5 mb-7 mb-lg-0">
+            <!-- Info -->
+            <div class="mb-5">
+                <h1 class="h2 font-weight-medium mb-3">Coming Event</h1>
+                <h2><strong>
+                        <?php echo $this->escapeHtml($row->getName()); ?></strong></h2>
+                <small><i class="far fa-calendar-alt"></i>
+                    <?php echo $this->escapeHtml(date('M d, Y', strtotime($row->getEventDate()))); ?></small>
+                <br><small><i class="fas fa-location-arrow"></i>
+                    <?php echo $this->escapeHtml($row->getVenue()); ?></small>
+                <br><small>
+                    <?php if ($row->getEventType() == 'team'): ?>
+                    <i class="fas fa-users"></i>
+                    <?php else: ?>
+                    <i class="fas fa-user"></i>
+                    <?php endif; ?>
+                    <?php echo $this->escapeHtml($row->getEventType()); ?></small>
+                <p>
+                    <i class="fas fa-info"></i>
+                    <?php echo $this->escapeHtml($row->getDescription()); ?>
+                </p>
+                <?php echo $this->getEventVolunteerProgress($row->getId()); ?>
+            </div>
+            <div class="mb-3">
+                <a class="btn btn-primary btn-wide transition-3d-hover mb-2 mb-sm-0 mr-3" href="<?php echo $this->url('events', ['action' => 'join', 'id' => $row->getId(),]); ?>">Join Event</a>
+            </div>
+            <!-- End Info -->
+        </div>
+        <div class="col-lg-6">
+            <!-- SVG Illustration -->
+            <a href="<?php echo $this->url('events', ['action' => 'join', 'id' => $row->getId(),]); ?>"><img class="card-img-top" src="/img/event/<?php echo $row->getId(); ?>/photo-750x450.jpg" alt=""></a>
+            <!-- End SVG Illustration -->
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>
+<!-- End Hero Section -->
+<!-- SVG Bottom Shape -->
+<figure>
+    <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100%" height="64px" viewBox="0 0 1921 273" style="margin-bottom: -8px; enable-background:new 0 0 1921 273;" xml:space="preserve">
+        <polygon class="fill-gray-100" points="1921,0 0,0 0,273 " />
+    </svg>
+</figure>
+<!-- End SVG Bottom Shape -->
+<div class="container">
+    <h1 class="h2 font-weight-medium mb-3 mt-3">Events</h1>
+    <div class="row">
+        <?php foreach ($paginator as $row): ?>
+        <?php if ($row->event_date > date('Y-m-d', strtotime('yesterday'))): ?>
+        <div class="col-lg-4 col-sm-6 portfolio-item mb-5">
+            <div class="card h-100">
+                <a href="<?php echo $this->url('events', ['action' => 'join', 'id' => $row->id,]); ?>"><img class="card-img-top" src="/img/event/<?php echo $row->id; ?>/photo-750x450.jpg" alt=""></a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="<?php echo $this->url('events', ['action' => 'join', 'id' => $row->id,]); ?>">
+                            <?php echo $this->escapeHtml($row->name); ?></a>
+                    </h4>
+                    <strong>By:
+                        <?php echo $this->escapeHtml($row->organization); ?></strong><br>
+                    <small>Date:
+                        <?php echo $this->escapeHtml(date('M d, Y', strtotime($row->event_date))); ?></small>
+                    <br><small>Venue:
+                        <?php echo $this->escapeHtml($row->venue); ?>,
+                        <?php echo $this->escapeHtml($row->city); ?></small>
+                    <br><small>Distance:
+                        <?php echo $this->escapeHtml(round($row->distance)); ?> KM Approximately</small>
+                    <p class="card-text">
+                        <?php echo $this->escapeHtml($row->description); ?>
+                    </p>
+                    <a href="<?php echo $this->url('events', ['action' => 'join', 'id' => $row->id,]); ?>" class="btn btn-primary">Join Event</a>
+                </div>
+            </div>
+        </div>
+        <?php else: ?>
+        <div class="col-lg-4 col-sm-6 portfolio-item">
+            <div class="card h-100">
+                <a href="<?php echo $this->url('events', ['action' => 'join', 'id' => $row->id,]); ?>"><img class="card-img-top" src="/img/event/<?php echo $row->id; ?>/photo-750x450.jpg" alt=""></a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="<?php echo $this->url('events', ['action' => 'join', 'id' => $row->id,]); ?>">
+                            <?php echo $this->escapeHtml($row->name); ?></a>
+                    </h4>
+                    <strong>By:
+                        <?php echo $this->escapeHtml($row->organization); ?></strong><br>
+                    <small>Date:
+                        <?php echo $this->escapeHtml(date('M d, Y', strtotime($row->event_date))); ?></small>
+                    <br><small>Venue:
+                        <?php echo $this->escapeHtml($row->venue); ?>,
+                        <?php echo $this->escapeHtml($row->city); ?></small>
+                    <br><small>Distance:
+                        <?php echo $this->escapeHtml($row->distance); ?> KM Approximately</small>
+                    <p class="card-text">
+                        <?php echo $this->escapeHtml($row->description); ?>
+                    </p>
+                    <a href="<?php echo $this->url('events', ['action' => 'join', 'id' => $row->id,]); ?>" class="btn btn-primary">View</a>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+</div>
+<!-- Features Section -->
+<div class="container space-2 space-lg-1">
+    <!-- Title -->
+    <div class="w-md-80 w-lg-50 text-center mx-md-auto mb-9">
+        <span class="d-block text-secondary font-size-1 font-weight-medium text-uppercase mb-2">Latest</span>
+        <h2 class="font-weight-medium">Announcement</h2>
+    </div>
+    <!-- End Title -->
+    <!-- Icon Blocks -->
+    <div class="row mb-9">
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <h4 class="card-header">Card Title</h4>
+                <div class="card-body">
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <h4 class="card-header">Card Title</h4>
+                <div class="card-body">
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ipsam eos, nam perspiciatis natus commodi similique totam consectetur praesentium molestiae atque exercitationem ut consequuntur, sed eveniet, magni nostrum sint fuga.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100">
+                <h4 class="card-header">Card Title</h4>
+                <div class="card-body">
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="#" class="btn btn-primary">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Icon Blocks -->
+</div>
+<!-- End Features Section -->
+<!-- SVG Top Shape -->
+<figure>
+    <svg preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100%" height="64px" viewBox="0 0 1921 273" style="margin-bottom: -8px; enable-background:new 0 0 1921 273;" xml:space="preserve">
+        <polygon class="fill-gray-100" points="0,273 1921,273 1921,0 " />
+    </svg>
+</figure>
+<!-- End SVG Top Shape -->
+<!-- Contacts Section -->
+<div class="bg-light position-relative">
+    <div class="container space-bottom-2">
+    </div>
+</div>
+<!-- End Contacts Section -->

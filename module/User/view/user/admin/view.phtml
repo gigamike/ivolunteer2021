@@ -1,0 +1,77 @@
+
+  <div class="container-fluid">
+
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="<?php echo $this->url('admin-user'); ?>">User</a>
+      </li>
+      <li class="breadcrumb-item active">View User</li>
+    </ol>
+
+    <?php
+    $flash = $this->flashMessenger();
+    $flash->setMessageOpenFormat('<div%s role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        ')
+        ->setMessageSeparatorString('')
+        ->setMessageCloseString('</div>');
+
+    echo $flash->render('error',   array('alert', 'alert-dismissible', 'alert-danger'));
+    echo $flash->render('info',    array('alert', 'alert-dismissible', 'alert-info'));
+    echo $flash->render('default', array('alert', 'alert-dismissible', 'alert-warning'));
+    echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success'));
+     ?>
+     <h1>View User</h1>
+     <hr>
+
+     <div class="card">
+      <div class="card-header">
+        User Profile And Events
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-6">
+            <img class="img-fluid rounded mb-4" src="/img/user/<?php echo $this->user->getId(); ?>/photo-750x450.jpg" alt="">
+          </div>
+          <div class="col-lg-6">
+            <h2><?php echo $this->escapeHtml($this->user->getFirstName()); ?> <?php echo $this->escapeHtml($this->user->getLastName()); ?></h2>
+            <p><strong>Email: </strong><?php echo $this->escapeHtml($this->user->getEmail()); ?></p>
+            <p><strong>Mobile: </strong><?php echo $this->escapeHtml($this->user->getMobileNo()); ?></p>
+            <p><strong>City: </strong><?php echo $this->escapeHtml($this->user->getCity()); ?></p>
+          </div>
+        </div>
+        <h2>Events History</h2>
+        <table class="table table-bordered table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Event Name</th>
+              <th>Date</th>
+              <th>Venue</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php if (count($this->paginator)): ?>
+              <?php foreach ($this->paginator as $row): ?>
+            <tr>
+              <td><?php echo $this->escapeHtml($row['name']); ?></td>
+              <td><?php echo $this->escapeHtml(date('M d, Y', strtotime($row['event_date']))); ?></td>
+              <td><?php echo $this->escapeHtml($row['venue']); ?></td>
+              <td><?php if($row['is_paid'] == 'Y'): ?>Paid<?php else: ?>Not Paid<?php endif; ?></td>
+          </tr>
+              <?php endforeach; ?>
+            <?php endif; ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+
+
+
+  </div>
+  <!-- /.container-fluid -->

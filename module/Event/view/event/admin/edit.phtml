@@ -1,0 +1,304 @@
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="<?php echo $this->url('admin-event'); ?>">Event</a>
+        </li>
+        <li class="breadcrumb-item active">Edit Event</li>
+    </ol>
+    <?php
+    $flash = $this->flashMessenger();
+    $flash->setMessageOpenFormat('<div%s role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        ')
+        ->setMessageSeparatorString('')
+        ->setMessageCloseString('</div>');
+
+    echo $flash->render('error', ['alert', 'alert-dismissible', 'alert-danger']);
+    echo $flash->render('info', ['alert', 'alert-dismissible', 'alert-info']);
+    echo $flash->render('default', ['alert', 'alert-dismissible', 'alert-warning']);
+    echo $flash->render('success', ['alert', 'alert-dismissible', 'alert-success']);
+     ?>
+    <h1>Edit Event</h1>
+    <hr>
+    <div class="card mb-3">
+        <div class="card-body">
+            <?php
+        $form->setAttribute('action', $this->url('admin-event', ['action' => 'edit', 'id' => $this->event->getId()]));
+        $form->prepare();
+        echo $this->form()->openTag($form);
+        ?>
+            <h2>Event Details</h2>
+            <div class="form-row">
+                <div class="col-md-12 mb-3">
+                    <?= $this->formLabel($form->get('name')) ?>
+                    <?= $this->formElement($form->get('name')) ?>
+                    <?= $this->formElementErrors()->render($form->get('name'), ['class' => 'help-block']) ?>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <?= $this->formLabel($form->get('category_id')) ?>
+                    <?= $this->formElement($form->get('category_id')) ?>
+                    <?= $this->formElementErrors()->render($form->get('category_id'), ['class' => 'help-block']) ?>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <?= $this->formLabel($form->get('event_date')) ?>
+                    <?= $this->formElement($form->get('event_date')) ?>
+                    <?= $this->formElementErrors()->render($form->get('event_date'), ['class' => 'help-block']) ?>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <?= $this->formLabel($form->get('venue')) ?>
+                    <?= $this->formElement($form->get('venue')) ?>
+                    <?= $this->formElementErrors()->render($form->get('venue'), ['class' => 'help-block']) ?>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <?= $this->formLabel($form->get('city')) ?>
+                    <?= $this->formElement($form->get('city')) ?>
+                    <?= $this->formElementErrors()->render($form->get('city'), ['class' => 'help-block']) ?>
+                    <small class="form-text text-muted"><button id="coordinatesBtn" type="button" class="btn btn-primary btn-sm"><i class="fab fa-google"></i> Check Coordinates</button>
+                        <span id="coordinatesWrapper"></span>
+                    </small>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-12 mb-3">
+                    <?= $this->formLabel($form->get('description')) ?>
+                    <?= $this->formElement($form->get('description')) ?>
+                    <?= $this->formElementErrors()->render($form->get('description'), ['class' => 'help-block']) ?>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-12 mb-3">
+                    <?= $this->formLabel($form->get('photo')) ?>
+                    <?= $this->formFile($form->get('photo')) ?>
+                    <?= $this->formElementErrors()->render($form->get('photo'), ['class' => 'help-block']) ?>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-12 mb-3">
+                    <label for="photo">Existing Image</label>
+                    <img class="img-fluid" src="/img/event/<?php echo $this->event->getId(); ?>/photo-750x450.jpg">
+                </div>
+            </div>
+            <hr>
+            <h2>Contact Details</h2>
+            <div class="form-row">
+                <div class="col-md-12 mb-3">
+                    <?= $this->formLabel($form->get('organization')) ?>
+                    <?= $this->formElement($form->get('organization')) ?>
+                    <?= $this->formElementErrors()->render($form->get('organization'), ['class' => 'help-block']) ?>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <?= $this->formLabel($form->get('contact_name')) ?>
+                    <?= $this->formElement($form->get('contact_name')) ?>
+                    <?= $this->formElementErrors()->render($form->get('contact_name'), ['class' => 'help-block']) ?>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <?= $this->formLabel($form->get('contact_email')) ?>
+                    <?= $this->formElement($form->get('contact_email')) ?>
+                    <?= $this->formElementErrors()->render($form->get('contact_email'), ['class' => 'help-block']) ?>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <?= $this->formLabel($form->get('contact_mobile_no')) ?>
+                    <?= $this->formElement($form->get('contact_mobile_no')) ?>
+                    <?= $this->formElementErrors()->render($form->get('contact_mobile_no'), ['class' => 'help-block']) ?>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <?= $this->formLabel($form->get('website_url')) ?>
+                    <?= $this->formElement($form->get('website_url')) ?>
+                    <?= $this->formElementErrors()->render($form->get('website_url'), ['class' => 'help-block']) ?>
+                </div>
+            </div>
+            <hr>
+            <h2>Event Type</h2>
+            <div class="form-row">
+                <div class="col-md-12 mb-3">
+                    <?= $this->formLabel($form->get('event_type')) ?>
+                    <?= $this->formElement($form->get('event_type')) ?>
+                    <?= $this->formElementErrors()->render($form->get('event_type'), ['class' => 'help-block']) ?>
+                </div>
+            </div>
+            <div id="teamWrapper">
+                <div id="moreTeamsWrapper">
+                    <?php if (count($teams) > 0): ?>
+                    <?php $ctrTeams = 0; foreach ($teams as $team): $ctrTeams++; ?>
+                    <div class="form-row">
+                        <!-- 1st row -->
+                        <div class="col-md-9 mb-3">
+                            <label>Team Name</label>
+                            <input type="text" class="form-control" placeholder="Team Name" name="teams[]" value="<?php echo $team['name']; ?>">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label>Team Limit</label>
+                            <input type="text" class="form-control" placeholder="Team Limit" name="team_limits[]" value="<?php echo $team['team_limit']; ?>">
+                        </div>
+                        <div class="col-md-1 mb-3">
+                            <?php if ($ctrTeams!=1): ?>
+                            <label>&nbsp;</label><input class="form-control removeButton btn btn-danger" type="button" value="X" name="remove">
+                            <?php endif; ?>
+                        </div>
+                        <!-- 1st row -->
+                    </div>
+                    <?php endforeach; ?>
+                    <?php else: ?>
+                    <div class="form-row">
+                        <!-- 1st row -->
+                        <div class="col-md-9 mb-3">
+                            <label>Team Name</label>
+                            <input type="text" class="form-control" placeholder="Team Name" name="teams[]">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label>Team Limit</label>
+                            <input type="text" class="form-control" placeholder="Team Limit" name="team_limits[]">
+                        </div>
+                        <div class="col-md-1 mb-3">
+                        </div>
+                        <!-- 1st row -->
+                    </div>
+                    <?php endif; ?>
+                </div>
+                <div class="text-right">
+                    <input id="addTeamButton" class="btn btn-default" type="button" value="Add Another Team" name="add">
+                </div>
+            </div>
+            <hr>
+            <h2>Event Tasks</h2>
+            <div id="moreTasksWrapper">
+                <?php if (count($tasks) > 0): ?>
+                <?php $ctrTasks = 0; foreach ($tasks as $task): $ctrTasks++; ?>
+                <div class="form-row">
+                    <!-- 1st row -->
+                    <div class="col-md-9 mb-3">
+                        <label>Task</label>
+                        <input type="text" class="form-control" placeholder="Task" name="tasks[]" value="<?php echo $task['task']; ?>">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label>Task Points</label>
+                        <input type="text" class="form-control" placeholder="Task Points" name="task_points[]" value="<?php echo $task['points']; ?>">
+                    </div>
+                    <div class="col-md-1 mb-3">
+                        <?php if ($ctrTasks!=1): ?>
+                        <label>&nbsp;</label><input class="form-control removeButton btn btn-danger" type="button" value="X" name="remove">
+                        <?php endif; ?>
+                    </div>
+                    <!-- 1st row -->
+                </div>
+                <?php endforeach; ?>
+                <?php else: ?>
+                <div class="form-row">
+                    <!-- 1st row -->
+                    <div class="col-md-9 mb-3">
+                        <label>Task</label>
+                        <input type="text" class="form-control" placeholder="Task" name="tasks[]">
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <label>Task Points</label>
+                        <input type="text" class="form-control" placeholder="Task Points" name="task_points[]">
+                    </div>
+                    <div class="col-md-1 mb-3">
+                    </div>
+                    <!-- 1st row -->
+                </div>
+                <?php endif; ?>
+            </div>
+            <div class="text-right">
+                <input id="addTaskButton" class="btn btn-default" type="button" value="Add Another Task" name="add">
+            </div>
+            <?php echo $this->formSubmit($form->get('submit')); ?>
+            <a href="<?php echo $this->url('admin-event'); ?>" class="btn btn-secondary">Cancel</a>
+            <?php echo $this->form()->closeTag();?>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+<!-- /.container-fluid -->
+<script>
+$(document).ready(function() {
+    $("#event_date").datepicker({
+        dateFormat: "yy-mm-dd",
+        changeMonth: true,
+        changeYear: true,
+        yearRange: "-100:+0",
+    });
+
+    <?php if ($this->event->getEventType()!='team'): ?>
+    $('#teamWrapper').hide();
+    <?php endif; ?>
+
+    $('#event_type').change(function(e) {
+        getEventType();
+    });
+    getEventType();
+
+    function getEventType() {
+        if ($('#event_type').val() == 'team') {
+            $('#teamWrapper').show();
+            $('#individualWrapper').hide();
+        } else {
+            $('#teamWrapper').hide();
+            $('#individualWrapper').show();
+        }
+    }
+
+    var teamMaxFields = 20;
+    var teamCtr = 1;
+    $('#addTeamButton').click(function(e) {
+        e.preventDefault();
+        if (teamCtr < teamMaxFields) {
+            teamCtr++;
+            $('#moreTeamsWrapper').append('<div class="form-row"><div class="col-md-9 mb-3"><label>Team Name</label><input type="text" class="form-control" placeholder="Team Name" name="teams[]"></div><div class="col-md-2 mb-3"><label>Team Limit</label><input type="text" class="form-control" placeholder="Team Limit" name="team_limits[]"></div><div class="col-md-1 mb-3"><label>&nbsp;</label><input class="form-control removeButton btn btn-danger" type="button" value="X" name="remove"></div></div>');
+        } else {
+            total_fields = teamMaxFields + 1;
+            alert("Maximum of " + teamMaxFields + " fields.");
+        }
+    });
+    $('#moreTeamsWrapper').on("click", ".removeButton", function(e) {
+        e.preventDefault();
+        $(this).closest('.form-row').remove();
+        teamCtr--;
+    });
+
+    var taskMaxFields = 20;
+    var taskCtr = 1;
+    $('#addTaskButton').click(function(e) {
+        e.preventDefault();
+        if (taskCtr < taskMaxFields) {
+            taskCtr++;
+            $('#moreTasksWrapper').append('<div class="form-row"><div class="col-md-9 mb-3"><label>Task</label><input type="text" class="form-control" placeholder="Task" name="tasks[]"></div><div class="col-md-2 mb-3"><label>Task Points</label><input type="text" class="form-control" placeholder="Task Points" name="task_points[]"></div><div class="col-md-1 mb-3"><label>&nbsp;</label><input class="form-control removeButton btn btn-danger" type="button" value="X" name="remove"></div></div>');
+        } else {
+            total_fields = taskMaxFields + 1;
+            alert("Maximum of " + taskMaxFields + " fields.");
+        }
+    });
+    $('#moreTasksWrapper').on("click", ".removeButton", function(e) {
+        e.preventDefault();
+        $(this).closest('.form-row').remove();
+        taskCtr--;
+    });
+
+    $('#coordinatesBtn').click(function(e) {
+        $.ajax({
+            method: "POST",
+            url: "<?php echo $this->url('admin-event', ['action' => 'ajax-get-coordinates',]); ?>",
+            data: $("form").serialize(),
+            success: function(jObj) {
+                if (jObj.success) {
+                    $("#coordinatesWrapper").html("&nbsp; Coordinates found: " + jObj.lat + ", " + jObj.long + ". Valid Address.");
+                } else {
+                    $("#coordinatesWrapper").html("&nbsp; Invalid venue and city.");
+                }
+
+            }
+        })
+    });
+});
+</script>

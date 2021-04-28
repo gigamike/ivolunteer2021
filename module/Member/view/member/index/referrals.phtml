@@ -1,0 +1,107 @@
+<div class="container space-top-md-2">
+    <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Welcome
+        <small>
+            <?php echo $this->user->getFirstName(); ?>
+            <?php echo $this->user->getLastName(); ?></small>
+    </h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="<?php echo $this->url('member'); ?>">Home</a>
+        </li>
+        <li class="breadcrumb-item active">My Referrals</li>
+    </ol>
+    <!-- Content Row -->
+    <div class="row">
+        <?php
+    $flash = $this->flashMessenger();
+    $flash->setMessageOpenFormat('<div%s role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        ')
+        ->setMessageSeparatorString('')
+        ->setMessageCloseString('</div>');
+
+    echo $flash->render('error', ['alert', 'alert-dismissible', 'alert-danger']);
+    echo $flash->render('info', ['alert', 'alert-dismissible', 'alert-info']);
+    echo $flash->render('default', ['alert', 'alert-dismissible', 'alert-warning']);
+    echo $flash->render('success', ['alert', 'alert-dismissible', 'alert-success']);
+     ?>
+        <!-- Sidebar Column -->
+        <div class="col-lg-3 mb-4">
+            <?php echo $this->partial('partial/member/menu.phtml', [
+                'route' => $this->route,
+                'action' => $this->action,
+            ]); ?>
+        </div>
+        <!-- Content Column -->
+        <div class="col-lg-9 mb-4">
+            <div class="card card-register mx-auto">
+                <div class="card-header">My Referrals</div>
+                <div class="card-body">
+                    <form>
+                        <div class="form-row">
+                            <div class="col-lg-10">
+                                <label class="sr-only" for="inlineFormInput">My Referral URL</label>
+                                <input id="referralUrl" type="text" class="form-control mb-2" placeholder="My Referral URL" value="<?php echo $config['baseUrl']; ?>registration?r=<?php echo $this->user->getId(); ?>">
+                            </div>
+                            <div class="col-lg-2">
+                                <button type="button" class="btn btn-primary mb-2" onclick="copy()">Copy</button>
+                            </div>
+                        </div>
+                    </form>
+                    <h2>Co-volunteers referred</h2>
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Email</th>
+                                <th>Date Join</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (count($this->paginator)): ?>
+                            <?php foreach ($this->paginator as $user): ?>
+                            <tr>
+                                <td>
+                                    <?php echo $this->escapeHtml($user->getFirstName()); ?>
+                                </td>
+                                <td>
+                                    <?php echo $this->escapeHtml($user->getLastName()); ?>
+                                </td>
+                                <td><a href="mailto:<?php echo $this->escapeHtml($user->getEmail()); ?>">
+                                        <?php echo $this->escapeHtml($user->getEmail()); ?></a></td>
+                                <td>
+                                    <?php echo $this->escapeHtml(date('M d, Y H:i:s', strtotime($user->getCreatedDatetime()))); ?>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+    </div>
+</div>
+<!-- /.row -->
+</div>
+<script>
+function copy() {
+    /* Get the text field */
+    var copyText = document.getElementById("referralUrl");
+
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+
+    /* Alert the copied text */
+    alert("Copied the text: " + copyText.value);
+}
+</script>>

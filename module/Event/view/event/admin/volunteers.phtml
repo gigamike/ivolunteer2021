@@ -1,0 +1,67 @@
+<div class="container-fluid">
+    <!-- Breadcrumbs-->
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="<?php echo $this->url('admin-event'); ?>">Event</a>
+        </li>
+        <li class="breadcrumb-item active">Volunteers</li>
+    </ol>
+    <?php
+    $flash = $this->flashMessenger();
+    $flash->setMessageOpenFormat('<div%s role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        ')
+        ->setMessageSeparatorString('')
+        ->setMessageCloseString('</div>');
+
+    echo $flash->render('error', ['alert', 'alert-dismissible', 'alert-danger']);
+    echo $flash->render('info', ['alert', 'alert-dismissible', 'alert-info']);
+    echo $flash->render('default', ['alert', 'alert-dismissible', 'alert-warning']);
+    echo $flash->render('success', ['alert', 'alert-dismissible', 'alert-success']);
+     ?>
+    <div class="card-body">
+        <div class="table-responsive">
+            <form id="frmSearch" method="post">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Email</th>
+                            <th>Date Register</th>
+                            <th>Date Check In</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (count($this->paginator)): ?>
+                        <?php foreach ($this->paginator as $volunteer): ?>
+                        <tr>
+                            <td>
+                                <?php echo $volunteer->last_name; ?>
+                            </td>
+                            <td>
+                                <?php echo $volunteer->first_name; ?>
+                            </td>
+                            <td>
+                                <?php echo $volunteer->email; ?>
+                            </td>
+                            <td>
+                                <?php echo $this->escapeHtml(date('F d, Y l', strtotime($volunteer->created_datetime))); ?>
+                            </td>
+                            <td>
+                                <?php if (!empty($volunteer->attend_datetime)): ?>
+                                <?php echo $this->escapeHtml(date('F d, Y l', strtotime($volunteer->attend_datetime))); ?>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+</div>

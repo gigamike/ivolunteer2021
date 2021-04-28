@@ -1,0 +1,37 @@
+<div class="container space-2 space-top-md-5 space-top-lg-4">
+    <h1 class="h2 font-weight-medium mb-3">Top Hero Volunteers</h1>
+    <div class="row">
+        <?php foreach ($paginator as $row): ?>
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 text-center">
+                <img class="card-img-top" src="/img/user/<?php echo $row['id']; ?>/photo-750x450.jpg" alt="">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <?php echo $row['first_name']; ?>
+                        <?php echo $row['last_name']; ?>
+                    </h4>
+                    <h6 class="card-subtitle mb-2 text-muted">Volunteer Points:
+                        <?php if (empty($row['points'])): ?>
+                        <?php echo 0 . " point"; ?>
+                        <?php elseif ($row['points'] == 1): ?>
+                        <?php echo 1 . " point"; ?>
+                        <?php else: ?>
+                        <?php echo $row['points'] . " points"; ?>
+                        <?php endif; ?>
+                    </h6>
+                    <?php if (!empty($row['last_attended'])): ?>
+                    <h6 class="card-subtitle mb-2 text-muted">Last Volunteer Active:
+                        <?php echo $this->escapeHtml(date('M d, Y', strtotime($row['last_attended']))); ?>
+                    </h6>
+                    <?php endif; ?>
+                </div>
+                <p class="card-text"></p>
+                <div class="card-footer">
+                    <a href="#" class="btn btn-primary">Message
+                        <?php echo $row['first_name']; ?></a>
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+</div>

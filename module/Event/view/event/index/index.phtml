@@ -1,0 +1,127 @@
+<div class="container space-2 space-top-md-5 space-top-lg-4">
+    <h1 class="h2 font-weight-medium mb-3">Events</h1>
+    <?php
+    $flash = $this->flashMessenger();
+    $flash->setMessageOpenFormat('<div%s role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        ')
+        ->setMessageSeparatorString('')
+        ->setMessageCloseString('</div>');
+
+    echo $flash->render('error', ['alert', 'alert-dismissible', 'alert-danger']);
+    echo $flash->render('info', ['alert', 'alert-dismissible', 'alert-info']);
+    echo $flash->render('default', ['alert', 'alert-dismissible', 'alert-warning']);
+    echo $flash->render('success', ['alert', 'alert-dismissible', 'alert-success']);
+     ?>
+    <?php
+        $form->setAttributes([
+            'action' => $this->url('events', ['action' => 'search',]),
+        ]);
+        $form->prepare();
+        echo $this->form()->openTag($form);
+        ?>
+    <div class="jumbotron">
+        <div class="form-row">
+            <div class="col-md-6 mb-2">
+                <label class="sr-only">Event Name</label>
+                <?= $this->formElement($form->get('name_keyword')) ?>
+            </div>
+            <div class="col-md-6">
+                <label class="sr-only">Organization</label>
+                <?= $this->formElement($form->get('organization_keyword')) ?>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-3">
+                <label class="sr-only">Category</label>
+                <?= $this->formElement($form->get('category_id')) ?>
+            </div>
+            <div class="col-md-3 mb-2">
+                <label class="sr-only">Event Date</label>
+                <?= $this->formElement($form->get('event_date')) ?>
+            </div>
+            <div class="col-md-3 mb-2">
+                <label class="sr-only">Distance</label>
+                <?= $this->formElement($form->get('distance')) ?>
+                <?php if (!empty($city)): ?>
+                <small class="form-text text-muted">
+                    Your current city is
+                    <?php echo $city; ?>
+                </small>
+                <?php endif; ?>
+            </div>
+            <div class="col-md-3 mb-2">
+                <label class="sr-only">City</label>
+                <?= $this->formElement($form->get('city_keyword')) ?>
+            </div>
+        </div>
+        <div class="text-right">
+            <?php echo $this->formSubmit($form->get('submit')); ?>
+        </div>
+    </div>
+    <?php echo $this->form()->closeTag();?>
+    <div class="row">
+        <?php foreach ($paginator as $row): ?>
+        <?php if ($row->event_date > date('Y-m-d', strtotime('yesterday'))): ?>
+        <div class="col-lg-4 col-sm-6 portfolio-item mb-5">
+            <div class="card h-100">
+                <a href="<?php echo $this->url('events', ['action' => 'join', 'id' => $row->id,]); ?>"><img class="card-img-top" src="/img/event/<?php echo $row->id; ?>/photo-750x450.jpg" alt=""></a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="<?php echo $this->url('events', ['action' => 'join', 'id' => $row->id,]); ?>">
+                            <?php echo $this->escapeHtml($row->name); ?></a>
+                    </h4>
+                    <strong>By:
+                        <?php echo $this->escapeHtml($row->organization); ?></strong><br>
+                    <small>Date:
+                        <?php echo $this->escapeHtml(date('M d, Y', strtotime($row->event_date))); ?></small>
+                    <br><small>Venue:
+                        <?php echo $this->escapeHtml($row->venue); ?>,
+                        <?php echo $this->escapeHtml($row->city); ?></small>
+                    <br><small>Distance:
+                        <?php echo $this->escapeHtml(round($row->distance)); ?> KM Approximately</small>
+                    <p class="card-text">
+                        <?php echo $this->escapeHtml($row->description); ?>
+                    </p>
+                    <a href="<?php echo $this->url('events', ['action' => 'join', 'id' => $row->id,]); ?>" class="btn btn-primary">Join Event</a>
+                </div>
+            </div>
+        </div>
+        <?php else: ?>
+        <div class="col-lg-4 col-sm-6 portfolio-item">
+            <div class="card h-100">
+                <a href="<?php echo $this->url('events', ['action' => 'join', 'id' => $row->id,]); ?>"><img class="card-img-top" src="/img/event/<?php echo $row->id; ?>/photo-750x450.jpg" alt=""></a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="<?php echo $this->url('events', ['action' => 'join', 'id' => $row->id,]); ?>">
+                            <?php echo $this->escapeHtml($row->name); ?></a>
+                    </h4>
+                    <strong>By:
+                        <?php echo $this->escapeHtml($row->organization); ?></strong><br>
+                    <small>Date:
+                        <?php echo $this->escapeHtml(date('M d, Y', strtotime($row->event_date))); ?></small>
+                    <br><small>Venue:
+                        <?php echo $this->escapeHtml($row->venue); ?>,
+                        <?php echo $this->escapeHtml($row->city); ?></small>
+                    <br><small>Distance:
+                        <?php echo $this->escapeHtml($row->distance); ?> KM Approximately</small>
+                    <p class="card-text">
+                        <?php echo $this->escapeHtml($row->description); ?>
+                    </p>
+                    <a href="<?php echo $this->url('events', ['action' => 'join', 'id' => $row->id,]); ?>" class="btn btn-primary">View</a>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+</div>
+<script>
+$(function() {
+    $(".datepicker").datepicker({
+        "dateFormat": "yy-mm-dd"
+    });
+});
+</script>
